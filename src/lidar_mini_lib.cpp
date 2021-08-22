@@ -29,12 +29,14 @@ size_t groundPointsFromCloud(json point_cloud, json *ground_point_cloud){
         point_cloud_set.insert(point);
     }    
 
+    // structues holds range of the most dense point cloud slice along z axis
     struct {
         size_t length = 0;
         set<point_3d>::iterator group_begin;
         set<point_3d>::iterator group_end;
     } ground_point_cloud_trim;
 
+    // single pass to find dense point cloud
     size_t length = 0;
     set<point_3d>::iterator itr_begin = point_cloud_set.begin();
     set<point_3d>::iterator itr_end = point_cloud_set.begin();
@@ -54,6 +56,7 @@ size_t groundPointsFromCloud(json point_cloud, json *ground_point_cloud){
         itr_end++;
     }
     
+    // additionaly return everything below ground points
     json ground_point_cloud_buffer = {};
     for(set<point_3d>::iterator itr = ground_point_cloud_trim.group_begin; itr != ground_point_cloud_trim.group_end; itr++){
         ground_point_cloud_buffer[to_string(itr->number)] = {
